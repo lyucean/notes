@@ -1,5 +1,4 @@
-# notes
-Notes
+# Notes
 
 - [Netdata.md](Netdata.md)
 - [js](JavaScript.md)
