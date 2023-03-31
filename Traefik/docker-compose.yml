@@ -1,0 +1,30 @@
+version: "3"
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped # перезапускать, если не остановлен
+    security_opt:
+      - no-new-privileges:true # запретим дополнительные привилегии для
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # тут dashboard
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--api.dashboard=true" # включим dashboard
+      - "--api.insecure=true" # нужно для dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # чтоб traefik мог подтягивать образы
+      - ./data/traefik.yml:/traefik.yml:ro # файл конфигурации traefik
+      - ./ssl:/ssl # папка под сертификаты
+    labels:
+      - traefik.enable=true #  сообщает что Traefik должен обеспечить доступ к этому контейнеру
+      - traefik.http.routers.traefik.entrypoints=https #  создаем новый роутер с точкой входа https
+      - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`) # роутеру назначен адрес traefik.lyucean.com под дашборд
+      - traefik.http.routers.traefik.tls=true # указываем что будет использоваться TLS
+      - traefik.http.routers.traefik.tls.certresolver=letsEncrypt # указывает что будет получаться сертификат через letsEncrypt
+      - traefik.http.routers.traefik.service=api@internal #  указываем, что сервер за этим роутером — api@internal, это специальный сервис, созданный по умолчанию, это наш дашборд
+      - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080

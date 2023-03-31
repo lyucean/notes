@@ -1,0 +1,37 @@
+entryPoints:
+  http: # название портов
+    address: ":80"
+  https:
+    address: ":443"
+
+http: # перенаправление всего трафика с http на https
+  routers:
+    http-catchall:
+      rule: hostregexp(`{host:.+}`)
+      entrypoints:
+        - http
+      middlewares:
+        - redirect-to-https
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: false
+
+api: # api для дашборда
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+certificatesResolvers: # получение сертификатов
+  letsEncrypt:
+    acme:
+      email: lyucean@gmail.com
+      storage: /ssl/acme.json
+#      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory" # для теста нужно
+      httpChallenge:
+        entryPoint: http
