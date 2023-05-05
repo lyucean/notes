@@ -1,3 +1,8 @@
+## Полезное
+
+- [Watchtower](https://github.com/containrrr/watchtower) — автоматическое обновление Docker-контейнеров
+- [Ctop](https://github.com/bcicen/ctop) — top-подобная утилита для вывода информации о контейнерах
+
 ## Команды
 
 [Все команды докера в оф.документации](https://docs.docker.com/engine/reference/commandline/docker/)
@@ -112,7 +117,6 @@
 `--skip-hostname-check` - Не проверяйте имя хоста демона против имени, указанного в клиентском сертификате
 
 `--project-directory PATH` - указать рабочую директорию (По умолчанию: Путь файла Compose)
-
 
 #### Ссылки
 
