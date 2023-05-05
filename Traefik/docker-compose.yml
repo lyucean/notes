@@ -28,3 +28,9 @@ services:
       - traefik.http.routers.traefik.tls.certresolver=letsEncrypt # указывает что будет получаться сертификат через letsEncrypt
       - traefik.http.routers.traefik.service=api@internal #  указываем, что сервер за этим роутером — api@internal, это специальный сервис, созданный по умолчанию, это наш дашборд
       - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
+      - traefik.docker.network=web
+    networks:
+      - web
+networks:
+  web:
+    external: true

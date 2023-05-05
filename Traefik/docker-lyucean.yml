@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  app1:
+    image: nginx
+    container_name: app1
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.app1.rule=Host(`lyucean.com`)
+      - traefik.http.routers.app1.entrypoints=https
+      - traefik.http.routers.app1.tls=true
+      - traefik.http.routers.app1.tls.certresolver=letsEncrypt
+    networks:
+      - web
+    volumes:
+      - /var/www/lyucean.com/:/usr/share/nginx/html
+
+networks:
+  web:

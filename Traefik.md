@@ -2,6 +2,7 @@
 
 1. `mkdir traefik && cd traefik`
 2. Копируем всё из [Traefik](Traefik)
+3. создаём сесть `docker network create web`
 
 
 ## Полезное
