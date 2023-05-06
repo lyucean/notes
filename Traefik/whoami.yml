@@ -1,6 +1,0 @@
-services:
-  whoami:
-    image: containous/whoami:latest
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`whoami.localhost`)

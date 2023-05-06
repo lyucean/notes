@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  nginx-abxtest:
+    image: nginx:latest
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Добавляем конфигурационный файл
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx-abxtest.rule=Host(`abxtest.com`)"
+      - "traefik.http.routers.nginx-abxtest.entrypoints=web"
+      - "traefik.http.services.nginx-abxtest.loadbalancer.server.port=80"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true # стандартная для всех на этом сервере
