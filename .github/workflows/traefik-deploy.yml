@@ -25,11 +25,7 @@ jobs:
           source: "Traefik"
           target: "/home/user/"
 
-      - name: Create web network if not exists
-        run: |
-          docker network ls | grep web || docker network create web
-
-      - name: Deploy docker-compose
+      - name: Create web network and start docker-compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -37,6 +33,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+#           Создадим сесть, если её нет
+            docker network ls | grep web || docker network create web
             cd /home/user/Traefik
             docker-compose pull
             docker-compose up -d
