@@ -44,7 +44,7 @@ jobs:
       - name: Check website
         uses: wei/curl@v1
         with:
-          args: -s -o /dev/null -w "%{http_code}" http://89.253.237.79:8080/dashboard/
+          args: -s -o /dev/null -w "%{http_code}" http://${{ secrets.HOST }}:8080/dashboard/
         id: response
       - name: Check response code
         run: |
