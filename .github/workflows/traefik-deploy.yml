@@ -3,7 +3,7 @@ name: Deploy Traefik Compose
 on:
   push:
     paths:
-      - "notes/Traefik/docker-compose.yml"
+      - "Traefik/docker-compose.yml"
       - ".github/workflows/traefik-deploy.yml"
 
 jobs:
