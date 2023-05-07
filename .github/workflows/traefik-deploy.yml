@@ -23,9 +23,16 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             mkdir -p /home/user/traefik
-            ls -al ./
-            ls -al ${{ github.workspace }}
-            cp -fr "${{ github.workspace }}/Traefik/docker-compose.yml" /home/user/traefik/docker-compose.yml
+
+      - name: Copy docker-compose.yml to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "notes/Traefik/"
+          target: "/home/user/traefik/"
 
       - name: Create web network if not exists
         run: |
