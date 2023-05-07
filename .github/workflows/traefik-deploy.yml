@@ -33,7 +33,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-#           Создадим сесть, если её нет
             docker network ls | grep web || docker network create web
             cd /home/user/Traefik
             docker-compose pull
