@@ -23,7 +23,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             mkdir -p /home/user/traefik
-            cp -fr ./notes/Traefik/docker-compose.yml /home/user/traefik/docker-compose.yml
+            cp -fr ${{ github.workspace }}/notes/Traefik/docker-compose.yml /home/user/traefik/docker-compose.yml
 
       - name: Create web network if not exists
         run: |
