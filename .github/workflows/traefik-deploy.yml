@@ -31,6 +31,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          run: ls -alh
           source: "Traefik"
           target: "/home/user/traefik/"
 
