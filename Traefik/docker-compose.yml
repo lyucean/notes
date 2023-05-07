@@ -2,7 +2,7 @@ version: '3'
 
 services:
   reverse-proxy:
-    image: traefik:v3.0
+    image: traefik:v2.5.4
     command:
       - "--api.insecure=true" # включим веб-интерфейс
       - "--providers.docker=true" # указывает Traefik слушать докер\

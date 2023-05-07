@@ -4,7 +4,7 @@ services:
   nginx-lyucean:
     image: nginx:latest
     volumes:
-      - ./html:/usr/share/nginx/html
+      - /var/www/lyucean.com/:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf # Добавляем конфигурационный файл
     labels:
       - "traefik.enable=true"
