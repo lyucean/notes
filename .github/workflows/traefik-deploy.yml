@@ -38,3 +38,19 @@ jobs:
             docker-compose pull
             docker-compose up -d
             docker ps
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check website
+        uses: wei/curl@v1
+        with:
+          args: -s -o /dev/null -w "%{http_code}" http://89.253.237.79:8080/dashboard/
+        id: response
+      - name: Check response code
+        run: |
+          if [ ${{ steps.response.outputs.stdout }} -ne 200 ]; then
+            echo "Website is not available"
+            exit 1
+          else
+            echo "Website is available"
+          fi
