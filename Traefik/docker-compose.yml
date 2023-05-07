@@ -15,6 +15,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # Чтобы Traefik мог слушать события Docker
     networks:
       - web
+    labels:
+      # добавим домен traefik.lyucean.com
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`)
 networks:
   web:
     external: true
