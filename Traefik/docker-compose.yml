@@ -18,7 +18,7 @@ services:
     labels:
       # добавим домен traefik.lyucean.com
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.entrypoints=web
       - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`)
 networks:
   web:
