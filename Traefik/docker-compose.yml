@@ -25,7 +25,7 @@ services:
       # добавим домен traefik.lyucean.com
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`traefik.example.com`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`)
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.tls.certresolver=letsencrypt
 networks:
