@@ -6,12 +6,12 @@ services:
     command:
       - "--api.insecure=true" # включим веб-интерфейс
       - "--providers.docker=true" # указывает Traefik слушать докер
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencrypt.acme.email=lyucean@gmail.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80" # указываем точку входа web
+      - "--entrypoints.websecure.address=:443" # указываем точку входа websecure
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true" # используем tls-вызовы
+#      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web" # указываем entrypoint
+      - "--certificatesresolvers.letsencrypt.acme.email=lyucean@gmail.com" # указываем email для регистрации в Let's Encrypt
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json" # указываем путь для хранения сертификатов
     ports:
       - "80:80"
       - "443:443"
@@ -26,9 +26,16 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`)
+      # TLS настройки
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.tls.certresolver=letsencrypt
+      # TLS настройки для дашборда
       - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
+      # middleware для редиректа с http на https
+      - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
+      - traefik.http.routers.http-catchall.entrypoints=web
+      - traefik.http.routers.http-catchall.middlewares=http-redirect
 networks:
   web:
     external: true
