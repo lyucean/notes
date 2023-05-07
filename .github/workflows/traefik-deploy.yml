@@ -14,16 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Copy docker-compose file
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            mkdir -p /home/user/traefik
-
       - name: Copy docker-compose.yml to remote server
         uses: appleboy/scp-action@master
         with:
@@ -33,7 +23,7 @@ jobs:
           port: ${{ secrets.PORT }}
           run: ls -alh
           source: "Traefik"
-          target: "/home/user/traefik/"
+          target: "/home/user/"
 
       - name: Create web network if not exists
         run: |
@@ -47,7 +37,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/user/traefik
+            cd /home/user/Traefik
             docker-compose pull
             docker-compose up -d
             docker ps
