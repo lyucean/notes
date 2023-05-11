@@ -8,8 +8,8 @@ services:
       - "--providers.docker=true" # указывает Traefik слушать докер
       - "--entrypoints.web.address=:80" # указываем точку входа web
       - "--entrypoints.websecure.address=:443" # указываем точку входа websecure
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true" # используем tls-вызовы
-#      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web" # указываем entrypoint
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true" # Указываем метод вызова ACME как HTTP Challenge
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.letsencrypt.acme.email=lyucean@gmail.com" # указываем email для регистрации в Let's Encrypt
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json" # указываем путь для хранения сертификатов
     ports:
