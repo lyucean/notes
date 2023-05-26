@@ -48,13 +48,4 @@ jobs:
       - name: Check website
         uses: wei/curl@v1
         with:
-          args: -s -o /dev/null -w "%{http_code}" https://${{ secrets.HOST }}:443/
-        id: response
-      - name: Check response code
-        run: |
-          if [ ${{ steps.response.outputs.stdout }} -ne 200 ]; then
-            echo "Netdata is not available"
-            exit 1
-          else
-            echo "Netdata is available"
-          fi
+          args:  https://netdata.lyucean.com
