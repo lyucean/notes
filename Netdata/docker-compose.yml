@@ -27,6 +27,8 @@ services:
       - traefik.http.routers.netdata.tls=true
       - traefik.http.routers.netdata.tls.certresolver=letsencrypt
       - traefik.http.services.netdata.loadbalancer.server.port=19999
+      - traefik.http.services.netdata.loadbalancer.server.scheme=http
+      - traefik.http.services.netdata.loadbalancer.passhostheader=true
     networks:
       - web
 
