@@ -2,6 +2,8 @@ version: '3'
 services:
   tinyproxy:
     image: dannydirect/tinyproxy
+#    ports:
+#      - 8888:8888
     restart: always
     labels:
       - "traefik.enable=true"
@@ -9,4 +11,4 @@ services:
       - "traefik.http.routers.tinyproxy.service=tinyproxy"
       - "traefik.http.services.tinyproxy.loadbalancer.server.port=8888"
     volumes:
-      - ./tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
+      - /home/user/VPN/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
