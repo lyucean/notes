@@ -1,0 +1,12 @@
+version: '3'
+services:
+  tinyproxy:
+    image: dannydirect/tinyproxy
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tinyproxy.rule=Host(`proxy.lyucean.com`)"
+      - "traefik.http.routers.tinyproxy.service=tinyproxy"
+      - "traefik.http.services.tinyproxy.loadbalancer.server.port=8888"
+    volumes:
+      - ./tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
