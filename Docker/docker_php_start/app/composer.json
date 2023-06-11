@@ -1,0 +1,21 @@
+{
+    "name": "lyucean/app",
+    "description": "PHP Start Pack",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Lyucean\\App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lyucean",
+            "email": "lyucean@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "fzaninotto/faker": "^1.9"
+    }
+}

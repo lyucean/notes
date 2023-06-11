@@ -1,2 +1,3 @@
 /.idea/
 /Docker/docker_php_start/.env
+/Docker/docker_php_start/app/vendor/
