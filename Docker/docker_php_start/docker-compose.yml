@@ -9,6 +9,7 @@ services:
       - ./app:/app
     depends_on:
       - composer
+      - mysql
 
   composer:
     image: composer
@@ -16,6 +17,14 @@ services:
       - .:/app
     working_dir: /app
     command: install
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_root_password
+      - MYSQL_DATABASE=your_database_name
+      - MYSQL_USER=your_username
+      - MYSQL_PASSWORD=your_password
 
   prod:
     image: alpine
