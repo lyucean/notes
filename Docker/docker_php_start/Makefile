@@ -29,8 +29,8 @@ composer-install: ## Поставим пакеты композера
 	echo 'Поставим пакеты композера'
 	#docker-compose run --rm php-fpm composer install
 
-docker-up: ## Поднимем контейнеры в фоне
-	docker-compose up -d
+docker-up: ## Поднимем контейнеры для разработки
+	docker-compose --profile debug up -d
 
 docker-build: ## соберём образы
 	docker-compose build

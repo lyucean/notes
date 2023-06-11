@@ -1,20 +1,21 @@
 version: '3'
 services:
-  dev:
+  any:
     image: alpine
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
-    command: [ "sh", "-c", 'echo "ENVIRONMENT=${ENVIRONMENT}"' ]
+    command: ["sh", "-c", 'echo "ENVIRONMENT=${ENVIRONMENT}"']
 
   prod:
     image: alpine
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
-    command: [ "sh", "-c", 'echo "ENVIRONMENT=${ENVIRONMENT}"' ]
-    depends_on:
-      - condition
+    command: ["sh", "-c", 'echo "Это Прод!"']
 
-  #Позволит запустить контейнеры в зависимости от окружения
-  condition:
+  dev:
     image: alpine
-    command: [ "sh", "-c", 'exit $([ "${ENVIRONMENT:-development}" != "production" ] && echo 0 || echo 1)' ]
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+    command: ["sh", "-c", 'echo "Это Дев!"']
+    profiles:
+      - debug
