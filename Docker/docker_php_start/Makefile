@@ -5,6 +5,12 @@ help:
 
 include .env
 
+ifeq ($(ENVIRONMENT),production)
+	PROFILE :=
+else
+	PROFILE := --profile debug
+endif
+
 init: ## Инициализация проекта
 init: docker-down docker-pull docker-build docker-up composer-install import-db-dump migrate
 
@@ -13,6 +19,9 @@ update: docker-down docker-pull docker-build docker-up composer-install migrate
 
 restart: ## Restart docker containers
 restart: docker-down docker-up
+
+down: ## Down docker containers
+down: docker-down
 
 php-bash: ## Подключается к контейнеру PHP
 	docker-compose exec php-fpm bash
@@ -30,14 +39,14 @@ composer-install: ## Поставим пакеты композера
 	#docker-compose run --rm php-fpm composer install
 
 docker-up: ## Поднимем контейнеры для разработки
-	docker-compose --profile debug up -d
+	docker-compose $(PROFILE) up -d
 
 docker-build: ## соберём образы
-	docker-compose build
+	docker-compose $(PROFILE) build
 
 docker-pull: ## поучим все контейнеры
-	docker-compose pull --include-deps
+	docker-compose $(PROFILE) pull --include-deps
 
 docker-down: ## Остановим контейнеры
-	docker-compose down --remove-orphans
+	docker-compose $(PROFILE) down --remove-orphans
 
