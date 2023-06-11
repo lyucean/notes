@@ -1,21 +1,24 @@
-version: '3'
+version: '3.9'
+
 services:
-  any:
-    image: alpine
-    environment:
-      - ENVIRONMENT=${ENVIRONMENT}
-    command: ["sh", "-c", 'echo "ENVIRONMENT=${ENVIRONMENT}"']
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+
 
   prod:
     image: alpine
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
-    command: ["sh", "-c", 'echo "Это Прод!"']
+    command: [ "sh", "-c", 'echo "Это Прод!"' ]
 
   dev:
     image: alpine
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
-    command: ["sh", "-c", 'echo "Это Дев!"']
+    command: [ "sh", "-c", 'echo "Это Дев!"' ]
     profiles:
       - debug
