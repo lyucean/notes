@@ -21,12 +21,13 @@ migrate: ## Применить миграции
 	echo 'Применить миграции'
 	#docker-compose run --rm php-fpm php vendor/bin/phinx migrate
 
-import-db-dump: ## Имортируем образ бд
+import-db-dump: ## Импорт образа бд
 	echo 'Импорт БД'
 	#gunzip < ./dump.sql.gz | docker-compose exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
 
-composer-install: ## поставим пакеты композера
-	docker-compose run --rm php-fpm composer install
+composer-install: ## Поставим пакеты композера
+	echo 'Поставим пакеты композера'
+	#docker-compose run --rm php-fpm composer install
 
 docker-up: ## Поднимем контейнеры в фоне
 	docker-compose up -d
@@ -37,6 +38,6 @@ docker-build: ## соберём образы
 docker-pull: ## поучим все контейнеры
 	docker-compose pull --include-deps
 
-docker-down: ## Остановим контенры
+docker-down: ## Остановим контейнеры
 	docker-compose down --remove-orphans
 
