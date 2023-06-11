@@ -16,6 +16,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "^1.9",
+        "robmorgan/phinx": "^0.13.4"
     }
 }

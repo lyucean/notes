@@ -28,7 +28,7 @@ php-bash: ## Подключается к контейнеру PHP
 
 migrate: ## Применить миграции
 	echo 'Применить миграции'
-	#docker-compose run --rm php-fpm php vendor/bin/phinx migrate
+	docker-compose run --rm php-cli php vendor/bin/phinx migrate
 
 import-db-dump: ## Импорт образа бд
 	echo 'Импорт БД'
