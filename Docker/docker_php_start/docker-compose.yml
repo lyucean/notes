@@ -21,21 +21,19 @@ services:
   mysql:
     image: mysql
     environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mysql
       - MYSQL_ROOT_PASSWORD=your_root_password
-      - MYSQL_DATABASE=your_database_name
-      - MYSQL_USER=your_username
-      - MYSQL_PASSWORD=your_password
-
-  prod:
-    image: alpine
-    environment:
-      - ENVIRONMENT=${ENVIRONMENT}
-    command: [ "sh", "-c", 'echo "Это Прод!"' ]
-
-  dev:
-    image: alpine
-    environment:
-      - ENVIRONMENT=${ENVIRONMENT}
-    command: [ "sh", "-c", 'echo "Это Дев!"' ]
+    depends_on:
+      - mysql
     profiles:
       - debug
