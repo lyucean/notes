@@ -1,17 +1,32 @@
 # Выполним по умолчанию, при запуске пустого make
 .DEFAULT_GOAL := help
 
+# Подключим файл конфигурации
+include .env
+
+# Добавим красоты и чтоб наши команды было видно в теле скрипта
+PURPLE = \033[1;35m--
+RESET = --\033[0m
+
 # Считываем файл, всё что содержит двойную решётку # Это описание к командам
 help:
 	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-17s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
 
-# Подключим файл конфигурации
-include .env
-
 delay: # Задержка, она требуется, чтоб MYSQL успел инициализироваться
 	@sleep 30
 .PHONY: delay
+
+wait-for-mysql: ## Задержка для MySQL, необходимая для инициализации
+	@echo "${PURPLE}Ожидание инициализации MySQL${RESET}"
+	@seconds=0; \
+	while ! nc -z localhost 3306; do \
+		seconds=$$((seconds+1)); \
+		sleep 1; \
+		echo "Прошло: $$seconds сек."; \
+	done
+.PHONY: wait-for-mysql migrate
+
 
 # В зависимости от окружения, мы подключаем разные профили
 ifeq ($(ENVIRONMENT),production)
@@ -19,10 +34,6 @@ ifeq ($(ENVIRONMENT),production)
 else
 	PROFILE := --profile debug
 endif
-
-# Добавим красоты и чтоб наши команды было видно в теле скрипта
-PURPLE = \033[1;35m--
-RESET = --\033[0m
 
 init: ## Инициализация проекта
 init: docker-down docker-pull docker-build docker-up composer-install delay import-db migrate
