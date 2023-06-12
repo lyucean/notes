@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app:/app
+      - ./.env:/app/.env
     depends_on:
-      - composer
       - mysql
 
   composer:
@@ -17,6 +17,8 @@ services:
       - .:/app
     working_dir: /app
     command: install
+    depends_on:
+      - php-cli
 
   mysql:
     image: mysql
@@ -29,10 +31,10 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - 8080:80
+      - "8080:80"
     environment:
-      - PMA_HOST=mysql
-      - MYSQL_ROOT_PASSWORD=your_root_password
+      - PMA_HOST=${PMA_HOST}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql
     profiles:
