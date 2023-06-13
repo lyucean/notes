@@ -4,6 +4,12 @@
 - [Ctop](https://github.com/bcicen/ctop) — top-подобная утилита для вывода информации о контейнерах
 - [Легкая установка расширений PHP](https://github.com/mlocati/docker-php-extension-installer)
 
+## Сборки
+
+- [docker_php_cli_start](Docker/docker_php_cli_start) - Готовая сборка для консольного приложения (PHP + Composer +
+  MySQL + Phinx (миграции) + phpMyAdmin (в dev окружении)
+- [docker_nginx](Docker/docker_nginx) - Заглушка nginx
+
 ## Команды
 
 <details>
@@ -51,6 +57,7 @@
 > В Windows лучше использовать директиву, `escape=``, чтоб иметь меньше проблем с путями в инструкциях.
 
 ### Команды
+
 ```shell
 FROM ##какой образ брать за основу
 LABEL ##описывает метаданные. Например - сведения о том, кто создал и поддерживает образ.
@@ -66,6 +73,7 @@ ENTRYPOINT ##предоставляет команду с аргументами
 EXPOSE ##указывает на необходимость открыть порт.
 VOLUME ##создаёт точку монтирования для работы с постоянным хранилищем.
 ```
+
 </details>
 
 <details>
