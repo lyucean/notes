@@ -40,8 +40,8 @@ endif
 init: ## Инициализация проекта
 init: docker-down docker-pull docker-build docker-up composer-install wait-for-mysql import-db migrate
 
-#update: ## Пересобрать контейнер, обновить композер и миграции
-#update: docker-down docker-pull docker-build docker-up composer-install wait-for-mysql migrate
+update: ## Пересобрать контейнер, обновить композер и миграции
+update: docker-down docker-pull docker-build docker-up composer-install wait-for-mysql migrate
 
 restart: ## Restart docker containers
 restart: docker-down docker-up
@@ -61,17 +61,13 @@ import-db: ## Импорт образа бд
 	@echo "$(PURPLE) Импорт БД $(RESET)"
 	@#gunzip < ./dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
 
-composer: ## Запуск композера
+composer: ## Работа с композером из консоли
 	@echo "$(PURPLE) Запустим композер $(RESET)"
 	@docker-compose $(ENV) run --rm composer $(filter-out $@,$(MAKECMDGOALS))
 
 composer-install: ## Поставим пакеты композера
 	@echo "$(PURPLE) Поставим пакеты композера $(RESET)"
 	@docker-compose $(ENV) run --rm composer install
-
-composer: ## Работа с композером из консоли
-	@echo "$(PURPLE) Поставим пакеты композера $(RESET)"
-	@docker-compose $(ENV) run --rm composer
 
 docker-up: ## Поднимем контейнеры
 	@echo "$(PURPLE) Поднимем контейнеры $(RESET)"
