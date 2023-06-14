@@ -30,7 +30,6 @@ wait-for-mysql: ## Задержка для MySQL, необходимая для 
 	done
 .PHONY: wait-for-mysql
 
-
 # Если это developer окружение, то подключим debug профиль
 PROFILE =
 ifeq ($(ENVIRONMENT),developer)
@@ -61,13 +60,9 @@ import-db: ## Импорт образа бд
 	@echo "$(PURPLE) Импорт БД $(RESET)"
 	@#gunzip < ./dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
 
-composer: ## Работа с композером из консоли
-	@echo "$(PURPLE) Запустим композер $(RESET)"
-	@docker-compose $(ENV) run --rm composer $(filter-out $@,$(MAKECMDGOALS))
-
 composer-install: ## Поставим пакеты композера
 	@echo "$(PURPLE) Поставим пакеты композера $(RESET)"
-	@docker-compose $(ENV) run --rm composer install
+	@docker-compose $(ENV) run --rm composer
 
 docker-up: ## Поднимем контейнеры
 	@echo "$(PURPLE) Поднимем контейнеры $(RESET)"

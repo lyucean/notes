@@ -15,7 +15,7 @@ services:
     volumes:
       - ./app:/app
     working_dir: /app
-#    command: install
+    command: install
 
   mysql:
     image: mysql
