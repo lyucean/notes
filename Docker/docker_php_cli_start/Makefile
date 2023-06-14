@@ -55,7 +55,7 @@ php-bash: ## Подключается к контейнеру PHP
 
 migrate: ## Применить миграции
 	@echo "$(PURPLE) Применить миграции $(RESET)"
-	#docker-compose $(ENV) run --rm php-cli php app/vendor/bin/phinx migrate --configuration app/phinx.php
+	docker-compose $(ENV) run --rm php-cli php app/vendor/bin/phinx migrate --configuration app/phinx.php
 
 import-db: ## Импорт образа бд
 	@echo "$(PURPLE) Импорт БД $(RESET)"
