@@ -2,10 +2,13 @@
 .DEFAULT_GOAL := help
 
 # Подключим файл конфигурации
-include .env
+include app/.env
+
+# И укажем его для docker-compose
+ENV = --env-file app/.env
 
 # Добавим красоты и чтоб наши команды было видно в теле скрипта
-PURPLE = \033[1;35m--
+PURPLE = \033[1;35m $(shell date +"%H:%M:%S") --
 RESET = --\033[0m
 
 # Считываем файл, всё что содержит двойную решётку # Это описание к командам
@@ -14,67 +17,67 @@ help:
 .PHONY: help
 
 delay: # Задержка, она требуется, чтоб MYSQL успел инициализироваться
-	@sleep 30
+	@sleep 3
 .PHONY: delay
 
-wait-for-mysql: ## Задержка для MySQL, необходимая для инициализации
-	@echo "${PURPLE}Ожидание инициализации MySQL${RESET}"
+wait-for-mysql: ## Задержка для MySQL, необходимая для инициализации, работает, только если mysql будет торчать наружу
+	@echo "$(PURPLE)Ожидание инициализации MySQL$(RESET)"
 	@seconds=0; \
-	while ! nc -z localhost 3306; do \
+	while ! docker-compose $(ENV) exec php-cli nc -z mysql 3306; do \
 		seconds=$$((seconds+1)); \
 		sleep 1; \
 		echo "Прошло: $$seconds сек."; \
 	done
-.PHONY: wait-for-mysql migrate
+.PHONY: wait-for-mysql
 
 
-# В зависимости от окружения, мы подключаем разные профили
-ifeq ($(ENVIRONMENT),production)
-	PROFILE :=
-else
+# Если это developer окружение, то подключим debug профиль
+PROFILE =
+ifeq ($(ENVIRONMENT),developer)
 	PROFILE := --profile debug
 endif
 
 init: ## Инициализация проекта
-init: docker-down docker-pull docker-build docker-up composer-install delay import-db migrate
+init: docker-down docker-pull docker-build docker-up composer-install wait-for-mysql import-db migrate
 
 update: ## Пересобрать контейнер, обновить композер и миграции
-update: docker-down docker-pull docker-build docker-up composer-install migrate
+update: docker-down docker-pull docker-build docker-up composer-install wait-for-mysql migrate
 
 restart: ## Restart docker containers
 restart: docker-down docker-up
 
 down: ## Остановить все контейнеры
-	@echo "${PURPLE} Остановим все контейнеры ${RESET}"
+	@echo "$(PURPLE) Остановим все контейнеры $(RESET)"
 	@docker-down
 
 php-bash: ## Подключается к контейнеру PHP
-	docker-compose exec php-fpm bash
+	docker-compose $(ENV) exec php-cli bash
 
 migrate: ## Применить миграции
-	@echo "${PURPLE} Применить миграции ${RESET}"
-	docker-compose run --rm php-cli php app/vendor/bin/phinx migrate --configuration app/phinx.php
+	@echo "$(PURPLE) Применить миграции $(RESET)"
+	#docker-compose $(ENV) run --rm php-cli php app/vendor/bin/phinx migrate --configuration app/phinx.php
 
 import-db: ## Импорт образа бд
-	@echo "${PURPLE} Импорт БД ${RESET}"
-	@#gunzip < ./dump.sql.gz | docker-compose exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
+	@echo "$(PURPLE) Импорт БД $(RESET)"
+	@#gunzip < ./dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
 
 composer-install: ## Поставим пакеты композера
-	@echo "${PURPLE} Поставим пакеты композера ${RESET}"
-	@#docker-compose run --rm php-cli pwd ##composer install
+	@echo "$(PURPLE) Поставим пакеты композера $(RESET)"
+	@#docker-compose $(ENV) run --rm php-cli pwd ##composer install
 
 docker-up: ## Поднимем контейнеры
-	@echo "${PURPLE} Поднимем контейнеры ${RESET}"
-	docker-compose $(PROFILE) up -d
+	@echo "$(PURPLE) Поднимем контейнеры $(RESET)"
+	docker-compose $(ENV) $(PROFILE) up -d
 
 docker-build: ## Соберём образы
-	@echo "${PURPLE} Соберём образы ${RESET}"
-	docker-compose $(PROFILE) build
+	@echo "$(PURPLE) Соберём образы $(RESET)"
+	docker-compose $(ENV) $(PROFILE) build
 
 docker-pull: ## Поучим все контейнеры
-	@echo "${PURPLE} Поучим все контейнеры ${RESET}"
-	docker-compose $(PROFILE) pull --include-deps
+	@echo "$(PURPLE) Поучим все контейнеры $(RESET)"
+	docker-compose $(ENV) $(PROFILE) pull --include-deps
 
 docker-down: ## Остановим контейнеры
-	docker-compose $(PROFILE) down --remove-orphans
+	@echo "$(PURPLE) Остановим контейнеры $(RESET)"
+	docker-compose $(ENV) $(PROFILE) down --remove-orphans
 

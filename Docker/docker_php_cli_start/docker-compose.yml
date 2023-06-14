@@ -7,18 +7,16 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app:/app
-      - ./.env:/app/.env
     depends_on:
       - mysql
+      - composer
 
   composer:
     image: composer
     volumes:
-      - .:/app
+      - ./app:/app
     working_dir: /app
     command: install
-    depends_on:
-      - php-cli
 
   mysql:
     image: mysql
