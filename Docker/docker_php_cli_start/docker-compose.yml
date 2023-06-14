@@ -8,7 +8,6 @@ services:
     volumes:
       - ./app:/app
     depends_on:
-      - mysql
       - composer
 
   composer:
@@ -16,7 +15,7 @@ services:
     volumes:
       - ./app:/app
     working_dir: /app
-    command: install
+#    command: install
 
   mysql:
     image: mysql

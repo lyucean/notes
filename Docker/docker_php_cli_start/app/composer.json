@@ -16,7 +16,6 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "fzaninotto/faker": "^1.9",
         "robmorgan/phinx": "^0.13.4",
         "vlucas/phpdotenv": "^5.5"
     }
