@@ -45,10 +45,6 @@ update: docker-down docker-pull docker-build docker-up composer-install wait-for
 restart: ## Restart docker containers
 restart: docker-down docker-up
 
-down: ## Остановить все контейнеры
-	@echo "$(PURPLE) Остановим все контейнеры $(RESET)"
-	@docker-down down --remove-orphans
-
 php-bash: ## Подключается к контейнеру PHP
 	docker-compose $(ENV) exec php-cli bash
 

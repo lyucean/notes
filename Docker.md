@@ -6,12 +6,13 @@
 
 ## Сборки
 
-1. [docker_php_cli_start](Docker/docker_php_cli_start) — Готовая сборка для консольного приложения 
+1. [docker_nginx](Docker/docker_nginx) — Заглушка nginx
+2. [docker_php_cli_start](Docker/docker_php_console_app) — Готовая сборка для консольного приложения 
    - PHP + Composer + MySQL + Phinx (миграции) + phpMyAdmin (в dev окружении) 
    - Два окружения, для прода и разработки
    - Makefile
-   - [README](Docker/docker_php_cli_start/README.md)
-2. [docker_nginx](Docker/docker_nginx) — Заглушка nginx
+   - Циклически выполняет код раз в минуту
+   - [README](Docker/docker_php_console_app/README.md)
 
 ## Команды
 
