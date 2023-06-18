@@ -2,15 +2,14 @@
 
 require_once('vendor/autoload.php');
 
-// use the factory to create a Faker\Generator instance
-//$faker = Faker\Factory::create();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-// generate data by accessing properties
+$dotenv->required('ENVIRONMENT')->notEmpty();
 
-
-//echo "Hello, World! " . $faker->name . PHP_EOL;
 
 while (true) {
+    echo $_ENV['ENVIRONMENT'] . PHP_EOL;
     echo "Current date and time: " . date("Y-m-d H:i:s") . PHP_EOL;
     sleep(1); // Задержка 1 секунда перед каждой итерацией цикла
 }
