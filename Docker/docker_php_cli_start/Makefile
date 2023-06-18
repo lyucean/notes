@@ -52,13 +52,16 @@ down: ## Остановить все контейнеры
 php-bash: ## Подключается к контейнеру PHP
 	docker-compose $(ENV) exec php-cli bash
 
+composer: ## Подключается к контейнеру PHP и работаем с composer
+	docker-compose $(ENV) exec php-cli bash -c "composer -V; bash"
+
 migrate: ## Применить миграции
 	@echo "$(PURPLE) Применить миграции $(RESET)"
 	docker-compose $(ENV) run --rm php-cli php vendor/bin/phinx migrate --configuration phinx.php
 
 import-db: ## Импорт образа бд
-	@echo "$(PURPLE) Импорт БД $(RESET)"
-	@#gunzip < ./dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
+	@echo "$(PURPLE) Импорт БД (если нужен) $(RESET)"
+	@#gunzip < ./app/db/dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
 
 composer-install: ## Поставим пакеты композера
 	@echo "$(PURPLE) Поставим пакеты композера $(RESET)"
