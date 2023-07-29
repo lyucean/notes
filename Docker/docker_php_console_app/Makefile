@@ -55,6 +55,10 @@ migrate: ## Применить миграции
 	@echo "$(PURPLE) Применить миграции $(RESET)"
 	docker-compose $(ENV) run --rm php-cli php vendor/bin/phinx migrate --configuration phinx.php
 
+rollback: ## Отменить последнюю миграцию
+	@echo "$(PURPLE) Применить миграции $(RESET)"
+	docker-compose $(ENV) run --rm php-cli php vendor/bin/phinx rollback --configuration phinx.php
+
 import-db: ## Импорт образа бд
 	@echo "$(PURPLE) Импорт БД (если нужен) $(RESET)"
 	@#gunzip < ./app/db/dump.sql.gz | docker-compose $(ENV) exec -T mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} BD
