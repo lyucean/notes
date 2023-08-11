@@ -1,0 +1,21 @@
+version: '3'
+services:
+  couchserver:
+    image: couchdb
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=${{ secrets.COUCHDB_USER }}
+      - COUCHDB_PASSWORD=${{ secrets.COUCHDB_PASSWORD }}
+    volumes:
+      - ./dbdata:/opt/couchdb/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.couchserver.rule=Host(`couchdb.lyucean.com`)
+      - traefik.http.routers.couchserver.entrypoints=websecure
+      - traefik.http.routers.couchserver.tls=true
+      - traefik.http.routers.couchserver.tls.certresolver=letsencrypt
+      - traefik.http.services.couchserver.loadbalancer.server.port=5984
+      - traefik.http.services.couchserver.loadbalancer.server.scheme=http
+      - traefik.http.services.couchserver.loadbalancer.passhostheader=true
