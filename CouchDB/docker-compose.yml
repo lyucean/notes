@@ -7,7 +7,7 @@ services:
       - "5984:5984"
     environment:
       COUCHDB_USER: ${COUCHDB_USER}
-      COUCHDB_PASSWORD: ${$COUCHDB_PASSWORD}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
     volumes:
       - ./dbdata:/opt/couchdb/data
     labels:

@@ -39,6 +39,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker network ls | grep web || docker network create web
+            echo "COUCHDB_USER=$COUCHDB_USER" >> .env
+            echo "COUCHDB_PASSWORD=$COUCHDB_PASSWORD" >> .env
             cd /home/user/CouchDB
             docker-compose pull
             docker-compose up -d
