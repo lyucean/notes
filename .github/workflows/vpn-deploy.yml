@@ -1,28 +1,28 @@
-#name: Deploy VPN Compose
-#
-#on:
-#  push:
-#    paths:
-#      - "VPN/docker-compose.yml"
-#      - ".github/workflows/vpn-deploy.yml"
-#
-#jobs:
-#  deploy:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#
-#      - name: Copy docker-compose.yml to remote server
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          source: "VPN"
-#          target: "/home/user/"
-#
+name: Deploy VPN Compose
+
+on:
+  push:
+    paths:
+      - "VPN/docker-compose.yml"
+      - ".github/workflows/vpn-deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Copy docker-compose.yml to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "VPN"
+          target: "/home/user/"
+
 #  publish:
 #    runs-on: ubuntu-latest
 #    needs: [deploy]
