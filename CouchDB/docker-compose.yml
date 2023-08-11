@@ -6,8 +6,8 @@ services:
     ports:
       - "5984:5984"
     environment:
-      - COUCHDB_USER=${{ secrets.COUCHDB_USER }}
-      - COUCHDB_PASSWORD=${{ secrets.COUCHDB_PASSWORD }}
+      COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
+      COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
     volumes:
       - ./dbdata:/opt/couchdb/data
     labels:

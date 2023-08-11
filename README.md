@@ -1,10 +1,11 @@
 # Notes
 
-- [Netdata.md](Netdata.md)
+- [Netdata](Netdata.md)
 - [js](JavaScript.md)
 - [PHP](PHP.md)
-- [Ansible.md](Ansible.md)
-- [Electron.js.md](Electron.js.md)
-- [MySQL.md](MySQL.md)
-- [Docker.md](Docker.md)
-- [Traefik.md](Traefik.md)
+- [Ansible](Ansible.md)
+- [Electron.js](Electron.js.md)
+- [MySQL](MySQL.md)
+- [Docker](Docker.md)
+- [Traefik](Traefik.md)
+- [CouchDB](CouchDB.md)
