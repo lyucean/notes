@@ -3,6 +3,7 @@ services:
   couchserver:
     image: couchdb
     restart: always
+    hostname: couchdb.lyucean.com
     ports:
       - "5984:5984"
     environment:
@@ -18,4 +19,10 @@ services:
       - traefik.http.routers.couchserver.tls.certresolver=letsencrypt
       - traefik.http.services.couchserver.loadbalancer.server.port=5984
       - traefik.http.services.couchserver.loadbalancer.server.scheme=http
-      - traefik.http.services.couchserver.loadbalancer.passhostheader=true
+#      - traefik.http.services.couchserver.loadbalancer.passhostheader=true
+    networks:
+      - web
+
+networks:
+  web:
+    external: true # стандартная для всех на этом сервере
