@@ -52,7 +52,7 @@ jobs:
       - name: Check website
         uses: wei/curl@v1
         with:
-          args:  https://couchdb.lyucean.com:5984/_utils/
+          args:  https://couchdb.lyucean.com/_utils/
         id: response
       - name: Check response code
         run: |
