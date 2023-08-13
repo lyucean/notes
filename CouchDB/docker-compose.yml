@@ -22,14 +22,14 @@ services:
     networks:
       - web
 
-  fauxton:
-    image: couchdb
-    restart: always
-    ports:
-      - "8000:8000" # Проброс порта для Fauxton
-    command: bash -c "/opt/couchdb/bin/fauxton"
-    networks:
-      - web
+#  fauxton:
+#    image: couchdb
+#    restart: always
+#    ports:
+#      - "8000:8000" # Проброс порта для Fauxton
+#    command: bash -c "/opt/couchdb/bin/fauxton"
+#    networks:
+#      - web
 
 networks:
   web:
