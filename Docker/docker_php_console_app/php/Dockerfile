@@ -32,5 +32,4 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 
 # Такой запук, нам нужен, чтоб писать вывод ошибок в лог
 #  && tail -f /dev/null позволяет не завершать докер после выполнения
-CMD ["sh", "-c", "php /app/script.php >> /app/log/error.log 2>&1 && tail -f /dev/null"]
-
+CMD ["sh", "-c", "php /app/script.php >> /app/log/error_runner 2>&1 && tail -f /dev/null"]
