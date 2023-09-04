@@ -39,7 +39,7 @@ jobs:
             cd /home/user/Traefik
             docker-compose pull
             docker-compose up -d
-            docker ps
+            docker-compose ps
 
   test:
     runs-on: ubuntu-latest
