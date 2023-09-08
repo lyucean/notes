@@ -41,8 +41,11 @@ endif
 # Если это developer окружение, то подключим debug профиль
 PROFILE =
 ifeq ($(ENVIRONMENT),developer)
-	PROFILE := --profile debug
+	PROFILE := --profile dev
+else
+	PROFILE := --profile main
 endif
+
 
 init: ## Инициализация проекта
 init: docker-down clean docker-pull docker-build docker-up composer-install wait-for-mysql import-db migrate log

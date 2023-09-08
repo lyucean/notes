@@ -17,7 +17,7 @@ $password = $_ENV['MYSQL_PASSWORD']; // Замените на пароль по�
 $database = $_ENV['MYSQL_DATABASE']; // Замените на имя базы данных MySQL
 
 // Где будем хранить логи
-$logFile = 'log/success_runner';
+$logFile = 'log/success_runner.log';
 
 // Проверяем, существует ли файл
 if (!file_exists($logFile)) {
@@ -43,7 +43,7 @@ while (true) {
         $stmt->bindParam(':column_value', $columnValue);
         $stmt->execute();
 
-        $logEntry =  "Данные успешно добавлены в таблицу.";
+        $logEntry =  "Данные успешно добавлены в таблицу.". PHP_EOL;
     } catch (PDOException $e) {
         $logEntry =  "Ошибка: " . $e->getMessage();
     }

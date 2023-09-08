@@ -2,6 +2,8 @@ version: '3.9'
 
 services:
   php-cli:
+    container_name: ${APP_NAME}_php
+    profiles: ["main", "dev"]
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -9,15 +11,23 @@ services:
       - ./app:/app
     depends_on:
       - composer
+    networks:
+      - app_network
 
   composer:
+    container_name: ${APP_NAME}_composer
+    profiles: ["main", "dev"]
     image: composer
     volumes:
       - ./app:/app
     working_dir: /app
     command: install
+    networks:
+      - app_network
 
   mysql:
+    container_name: ${APP_NAME}_mysql
+    profiles: ["main", "dev"]
     image: mysql
     restart: unless-stopped
     environment:
@@ -25,8 +35,12 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - app_network
 
   phpmyadmin:
+    container_name: ${APP_NAME}_phpmyadmin
+    profiles: ["dev"]
     image: phpmyadmin/phpmyadmin
     ports:
       - "8080:80"
@@ -35,5 +49,9 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql
-    profiles:
-      - debug
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
