@@ -19,7 +19,7 @@ help:
 wait-for-mysql: ## Задержка для MySQL, необходимая для инициализации, работает, только если mysql будет торчать наружу
 	@echo "$(PURPLE)Ожидание инициализации MySQL$(RESET)"
 	@seconds=0; \
-	while ! docker-compose $(ENV) exec php-cli nc -z mysql 3306; do \
+	while ! docker-compose exec -T php-cli nc -z mysql 3306; do \
 		seconds=$$((seconds+1)); \
 		sleep 1; \
 		echo "Прошло: $$seconds сек."; \
@@ -28,9 +28,9 @@ wait-for-mysql: ## Задержка для MySQL, необходимая для 
 
 log: ## Вывод логов
 ifeq ($(ENVIRONMENT), developer)
-	tail -f app/log/success_runner.log
+	@tail -f app/logs/success_runner.log
 else
-	tail -f app/log/error_runner.log
+	@tail -f app/logs/error_runner.log
 endif
 .PHONY: log
 
@@ -42,15 +42,14 @@ else
 	PROFILE := --profile main
 endif
 
-
 init: ## Инициализация проекта
-init: docker-down clean docker-pull docker-build docker-up composer-install wait-for-mysql import-db migrate log
+init: clean docker-down docker-pull docker-build docker-up composer-install wait-for-mysql import-db migrate log
 
 update: ## Пересобрать контейнер, обновить композер и миграции
-update: docker-down clean docker-pull docker-build docker-up composer-install wait-for-mysql migrate log
+update: clean docker-down docker-pull docker-build docker-up composer-install wait-for-mysql migrate log
 
 restart: ## Restart docker containers
-restart: docker-down clean docker-up log
+restart: clean docker-down docker-up log
 
 php-bash: ## Подключается к контейнеру PHP
 	docker-compose $(ENV) exec php-cli bash
@@ -61,10 +60,6 @@ composer: ## Подключается к контейнеру PHP и работ�
 migrate: ## Применить миграции
 	@echo "$(PURPLE) Применить миграции $(RESET)"
 	docker-compose $(ENV) run --rm php-cli php vendor/bin/phinx migrate --configuration phinx.php
-
-rollback: ## отменить последнюю миграцию
-	@echo "$(PURPLE) Применить миграции $(RESET)"
-	docker-compose $(ENV) run --rm php-cli php vendor/bin/phinx rollback --configuration phinx.php
 
 rollback: ## Отменить последнюю миграцию
 	@echo "$(PURPLE) Применить миграции $(RESET)"
@@ -96,4 +91,4 @@ docker-down: ## Остановим контейнеры
 
 clean:  ## Очистим папку логов
 	@echo "$(PURPLE) Очистим папку логов $(RESET)"
-	rm -f app/log/*.log
+	rm -f app/logs/*

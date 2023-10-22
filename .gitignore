@@ -3,3 +3,5 @@
 /Docker/docker_php_console_app/app/vendor/*
 /Docker/docker_php_console_app/app/.env
 /CouchDB/dbdata/*
+/Docker/docker_php_console_app/app/logs/error_runner.log
+/Docker/docker_php_console_app/app/logs/success_runner.log

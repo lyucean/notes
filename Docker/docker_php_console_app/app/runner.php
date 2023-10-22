@@ -1,66 +1,56 @@
 <?php
-require_once('vendor/autoload.php');
+/**
+ * Этот скрипт запускает основной скрипт бота каждую секунду и пишет логи от его выполнения.
+ */
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$max_execution_time = 60; // Зададим максимальное время выполнения нашего скрипта
+$logFile_success = 'logs/success_runner.log'; // Где будем хранить логи работы бота
+$logFile_error = 'logs/error_runner.log'; // Где будем хранить логи работы бота
+$targetScript = dirname(__FILE__) . '/main.php'; // Путь к целевому скрипту
+$periodChecked = 3; // Период проверки скрипта
 
-$dotenv->required('ENVIRONMENT')->notEmpty();
-$dotenv->required('PMA_HOST')->notEmpty();
-$dotenv->required('MYSQL_USER')->notEmpty();
-$dotenv->required('MYSQL_PASSWORD')->notEmpty();
-$dotenv->required('MYSQL_DATABASE')->notEmpty();
-
-// Параметры для подключения к базе данных
-$hostname = $_ENV['PMA_HOST']; // Или IP-адрес сервера MySQL
-$username = $_ENV['MYSQL_USER']; // Замените на имя пользователя MySQL
-$password = $_ENV['MYSQL_PASSWORD']; // Замените на пароль пользователя MySQL
-$database = $_ENV['MYSQL_DATABASE']; // Замените на имя базы данных MySQL
-
-// Где будем хранить логи
-$logFile = 'log/success_runner.log';
-
-// Проверяем, существует ли файл
-if (!file_exists($logFile)) {
-    // Создаем файл
-    touch($logFile);
-    chmod($logFile, 0777);
+// Проверяем, существует ли файл логов, если нет - создадим
+if (!file_exists($logFile_success)) {
+    touch($logFile_success);
+    chmod($logFile_success, 0777); // поправим права
+}
+if (!file_exists($logFile_error)) {
+    touch($logFile_error);
+    chmod($logFile_error, 0777); // поправим права
 }
 
 // Устанавливаем максимальное время выполнения скрипта в 60 секунд
 set_time_limit(60);
 
-// Бесконечный цикл, который будет повторяться после завершения
+// Бесконечный цикл, который будет вызывать основной файл скрипта
 while (true) {
+    // Засекаем время до выполнения скрипта
+    $startTime = microtime(true);
 
-    try {
-        // Подключение к базе данных
-        $pdo = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Выполняем целевой скрипт и сохраняем вывод в переменную
+    $command = "php $targetScript";
+    $output = [];
+    exec($command, $output);
 
-        // Подготовка и выполнение запроса на вставку строки
-        $stmt = $pdo->prepare("INSERT INTO test_table (test_column, test_column_date_time) VALUES (:column_value, NOW())");
-        $columnValue = $_ENV['ENVIRONMENT'] . ' - ' . date("Y-m-d H:i:s"); // Значение для колонки test_column
-        $stmt->bindParam(':column_value', $columnValue);
-        $stmt->execute();
+    // Засекаем время после выполнения скрипта и вычисляем разницу в миллисекундах
+    $endTime = microtime(true);
+    $executionTimeMs = ($endTime - $startTime) * 1000;
 
-        $logEntry =  "Данные успешно добавлены в таблицу.". PHP_EOL;
-    } catch (PDOException $e) {
-        $logEntry =  "Ошибка: " . $e->getMessage();
-    }
-
-    // Добавляем запись в файл
-    file_put_contents($logFile, $logEntry, FILE_APPEND);
+    // Записываем вывод и время выполнения в лог файл
+    $logMessage = date('Y-m-d H:i:s') . " : Execution time: " . number_format($executionTimeMs, 2) . " ms\n";
+    $logMessage .= '    ' . implode("\n", $output) . PHP_EOL;
+    file_put_contents($logFile_success, $logMessage, FILE_APPEND);
 
     // Завершаем текущую итерацию, чтобы избежать нагрузки на сервер
-    sleep(1); // Задержка 1 секунда перед каждой итерацией цикла
+    sleep($periodChecked); // Задержка в секундах перед каждой итерацией цикла
 
     // Определяем текущее время
     $currentTime = time();
 
-    // Проверяем, если прошла минута, завершаем скрипт и перезапускаем его
-    if ($currentTime - $_SERVER['REQUEST_TIME'] >= 60) {
+    // Проверяем, если скрипт работает больше нужного, перезапустим его
+    if ($currentTime - $_SERVER['REQUEST_TIME'] >= $max_execution_time) {
         // Запускаем новый экземпляр скрипта
-        exec('php ' . __FILE__ . ' >> /app/log/error_runner 2>&1 &');
+        exec('php ' . __FILE__ . ' >> ' . $logFile_error . ' 2>&1 &');
         exit(); // Завершаем текущий экземпляр скрипта
     }
 }
