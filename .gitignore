@@ -3,6 +3,3 @@
 /Docker/docker_php_console_app/app/logs/*
 /Docker/docker_php_console_app/app/vendor/*
 /CouchDB/dbdata/*
-/Docker/docker_backup/app/.env
-/Docker/docker_backup/app/logs/*
-/Docker/docker_backup/app/vendor/*
