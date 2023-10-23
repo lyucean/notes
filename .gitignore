@@ -1,7 +1,8 @@
 /.idea/
-/Docker/docker_php_console_app/app/log/*
-/Docker/docker_php_console_app/app/vendor/*
 /Docker/docker_php_console_app/app/.env
+/Docker/docker_php_console_app/app/logs/*
+/Docker/docker_php_console_app/app/vendor/*
 /CouchDB/dbdata/*
-/Docker/docker_php_console_app/app/logs/error_runner.log
-/Docker/docker_php_console_app/app/logs/success_runner.log
+/Docker/docker_backup/app/.env
+/Docker/docker_backup/app/logs/*
+/Docker/docker_backup/app/vendor/*
