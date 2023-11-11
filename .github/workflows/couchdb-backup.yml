@@ -1,0 +1,29 @@
+name: Making a backup
+
+on:
+  schedule:
+    - cron: '0 1 * * *' # Запускать каждый день в полночь UTC
+  push:
+    paths:
+      - ".github/workflows/couchdb-backup.yml"
+
+jobs:
+  backup-db:
+    name: "Бекап БД"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Подготовка репозитория"
+        uses: actions/checkout@v3
+
+      - name: "Настройка даты архива"
+        run: echo "BACKUP_DATETIME=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: "Снимем дамп БД"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            tar -cvzf ${{ secrets.BACKUPS_FOLDER }}/INK_${BACKUP_DATETIME}.file.gz /home/user/CouchDB/dbdata/*
