@@ -15,9 +15,6 @@ jobs:
       - name: "Подготовка репозитория"
         uses: actions/checkout@v3
 
-      - name: "Настройка даты архива"
-        run: echo "BACKUP_DATETIME=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
       - name: "Снимем дамп БД"
         uses: appleboy/ssh-action@master
         with:
@@ -26,4 +23,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            tar -cvzf ${{ secrets.BACKUPS_FOLDER }}/INK_${BACKUP_DATETIME}.file.gz /home/user/CouchDB/dbdata/*
+            tar -cvzf ${{ secrets.BACKUPS_FOLDER }}/INK_$(date +\%Y-\%m-\%d).nosql.gz /home/user/CouchDB/dbdata/*
