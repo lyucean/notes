@@ -1,4 +1,4 @@
-name: Making a backup
+name: Backup CouchDB
 
 on:
   schedule:
