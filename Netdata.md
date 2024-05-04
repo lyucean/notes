@@ -1,6 +1,8 @@
 # Заметки по netdata
 
 
-[Установка и настройка модулей](https://github.com/lyucean/ru_netdata/blob/main/install.md)
+[Установка и настройка модулей](https://github.com/lyucean/notes/blob/main/Netdata/install.md)
 
-[Описание графиков](https://github.com/lyucean/ru_netdata/blob/main/man.md)
+
+[Описание графиков](https://github.com/lyucean/netdata/blob/main/man.md)
+
