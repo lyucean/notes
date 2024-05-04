@@ -37,9 +37,9 @@ jobs:
           script: |
             docker network ls | grep web || docker network create web
             cd /home/user/Traefik
-            docker-compose pull
-            docker-compose up -d
-            docker-compose ps
+            docker compose pull
+            docker compose up -d
+            docker compose ps
 
   test:
     runs-on: ubuntu-latest
