@@ -1,8 +1,8 @@
 name: Backup CouchDB
 
 on:
-  schedule:
-    - cron: '0 1 * * *' # Запускать каждый день в полночь UTC
+  #schedule:
+  #  - cron: '0 1 * * *' # Запускать каждый день в полночь UTC
   push:
     paths:
       - ".github/workflows/couchdb-backup.yml"
