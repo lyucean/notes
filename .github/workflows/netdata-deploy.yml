@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Copy docker-compose.yml to remote server
         uses: appleboy/scp-action@master
@@ -37,8 +37,8 @@ jobs:
           script: |
             docker network ls | grep web || docker network create web
             cd /home/user/Netdata
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
             docker ps
 
   test:
@@ -53,8 +53,8 @@ jobs:
       - name: Check response code
         run: |
           if [ ${{ steps.response.outputs.stdout }} -ne 200 ]; then
-            echo "Website is not available"
+            echo "Netdata is not available"
             exit 1
           else
-            echo "Website is available"
+            echo "Netdata is available"
           fi
