@@ -1,14 +1,15 @@
 version: '3'
 services:
   netdata:
-    image: netdata/netdata
+    image: netdata/netdata:edge
     container_name: netdata
     hostname: netdata.lyucean.com
-    ports:
-      - 19999:19999
+    pid: host
+    network_mode: host
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
+      - SYS_ADMIN
     security_opt:
       - apparmor:unconfined
     volumes:
@@ -17,9 +18,16 @@ services:
       - netdatacache:/var/cache/netdata
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=S-j7cc9D6QmMVQHCIfJOblE9tLeC7gXJFi1lINQ8Ltpo2XMkfzC6JFwk7uHZuxZxli5-KisE0xbL6r0-Llch4jzzFg7uKBtq9b2Ojw7UubVbCii_4uZ7SF2Pm18AQ6L_L3xr-2E
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=2c6aec53-a4a5-4d5f-b9fe-5a9384700858
     labels:
       - traefik.enable=true
       - traefik.http.routers.netdata.rule=Host(`netdata.lyucean.com`)
@@ -31,7 +39,6 @@ services:
       - traefik.http.services.netdata.loadbalancer.passhostheader=true
     networks:
       - web
-
 volumes:
   netdataconfig:
   netdatalib:
@@ -40,5 +47,4 @@ volumes:
 networks:
   web:
     external: true # стандартная для всех на этом сервере
-
 
