@@ -25,9 +25,9 @@ services:
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - NETDATA_CLAIM_TOKEN=S-j7cc9D6QmMVQHCIfJOblE9tLeC7gXJFi1lINQ8Ltpo2XMkfzC6JFwk7uHZuxZxli5-KisE0xbL6r0-Llch4jzzFg7uKBtq9b2Ojw7UubVbCii_4uZ7SF2Pm18AQ6L_L3xr-2E
+      - NETDATA_CLAIM_TOKEN=HFzmnC-16Jmmp4vLXRGvK0aDm15CrKacU7RF7IhIBfbhrbySXD6AGBIsyD50skGvLqzdB2GWslErYbLVTKzF_gONF1-JH7qmYVc1gboYbiQOH69Bt8gOF3fMMfwY0VeEnHIFDQ0
       - NETDATA_CLAIM_URL=https://app.netdata.cloud
-      - NETDATA_CLAIM_ROOMS=2c6aec53-a4a5-4d5f-b9fe-5a9384700858
+      - NETDATA_CLAIM_ROOMS=4d9639e4-9b37-4b72-a76a-ca2d4a6bc39f
     labels:
       - traefik.enable=true
       - traefik.http.routers.netdata.rule=Host(`netdata.lyucean.com`)
