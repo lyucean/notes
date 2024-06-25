@@ -56,5 +56,5 @@ jobs:
             echo "Traefik не запустился"
             exit 1
           else
-            echo "Traefik запущен корректно"
+            echo "Traefik запущен"
           fi
