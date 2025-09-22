@@ -48,7 +48,7 @@ jobs:
       - name: Check website
         uses: wei/curl@v1
         with:
-          args: -s -o /dev/null -w "%{http_code}" http://${{ secrets.HOST }}/dashboard/
+          args: -s -o /dev/null -w "%{http_code}" https://traefik.lyucean.com/dashboard/
         id: response
       - name: Check response code
         run: |
