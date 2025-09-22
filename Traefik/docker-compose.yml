@@ -4,38 +4,40 @@ services:
     image: traefik:v3.1
     restart: always
     command:
-      - "--api.dashboard=true" # включим веб-интерфейс
-      - "--providers.docker=true" # указывает Traefik слушать докер
-      - "--entrypoints.web.address=:80" # указываем точку входа web
-      - "--entrypoints.websecure.address=:443" # указываем точку входа websecure
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true" # Указываем метод вызова ACME как HTTP Challenge
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"  # Добавим безопасность
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencrypt.acme.email=lyucean@gmail.com" # указываем email для регистрации в Let's Encrypt
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json" # указываем путь для хранения сертификатов
+      - "--certificatesresolvers.letsencrypt.acme.email=lyucean@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--log.level=DEBUG"  # Включим подробные логи для диагностики
     ports:
       - "80:80"
       - "443:443"
-#      - "8080:8080" # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # Чтобы Traefik мог слушать события Docker
-      - ./letsencrypt:/letsencrypt # папка с сертификатами
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
     networks:
       - web
     labels:
-      # добавим домен traefik.lyucean.com
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`traefik.lyucean.com`)
-      # TLS настройки
-      - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.tls.certresolver=letsencrypt
-      # TLS настройки для дашборда
-      - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
-      # middleware для редиректа с http на https
-      - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.api.rule=Host(`traefik.lyucean.com`)
+      - traefik.http.routers.api.entrypoints=websecure
+      - traefik.http.routers.api.tls=true
+      - traefik.http.routers.api.tls.certresolver=letsencrypt
+      - traefik.http.routers.api.service=api@internal
+      # Глобальный редирект
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
       - traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)
       - traefik.http.routers.http-catchall.entrypoints=web
-      - traefik.http.routers.http-catchall.middlewares=http-redirect
+      - traefik.http.routers.http-catchall.middlewares=https-redirect
+
 networks:
   web:
     external: true
