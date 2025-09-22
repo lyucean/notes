@@ -1,11 +1,10 @@
-version: '3'
 
 services:
   reverse-proxy:
-    image: traefik:v2.10
+    image: traefik:v3.1
     restart: always
     command:
-      - "--api.insecure=true" # включим веб-интерфейс
+      - "--api.dashboard=true" # включим веб-интерфейс
       - "--providers.docker=true" # указывает Traefik слушать докер
       - "--entrypoints.web.address=:80" # указываем точку входа web
       - "--entrypoints.websecure.address=:443" # указываем точку входа websecure
@@ -16,7 +15,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080" # The Web UI (enabled by --api.insecure=true)
+#      - "8080:8080" # The Web UI (enabled by --api.insecure=true)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Чтобы Traefik мог слушать события Docker
       - ./letsencrypt:/letsencrypt # папка с сертификатами
@@ -34,7 +33,7 @@ services:
       - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
       # middleware для редиректа с http на https
       - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
-      - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
+      - traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)
       - traefik.http.routers.http-catchall.entrypoints=web
       - traefik.http.routers.http-catchall.middlewares=http-redirect
 networks:
